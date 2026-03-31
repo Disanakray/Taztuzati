@@ -17,14 +17,13 @@ body {
   background: #f0f0f0;
 }
 #flipbook {
-  width: 90%;
-  max-width: 872px;
-  height: 1220px;
+  width: 872px;    /* ширина одной страницы */
+  height: 1220px;  /* высота страницы */
 }
 .page {
   width: 100%;
   height: 100%;
-  background-size: cover;  /* заполняет весь блок */
+  background-size: cover;  /* изображение растягивается */
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 5px;
@@ -36,6 +35,7 @@ body {
 <div id="flipbook"></div>
 
 <script>
+// Массив изображений
 const images = [
   'images/1.jpg',   // обложка
   'images/2.jpg',
@@ -47,7 +47,7 @@ const images = [
   'images/8.jpg',
   'images/9.jpg',
   'images/10.jpg',
-  'images/11.jpg',  // исправлено
+  'images/11.jpg',
   'images/12.jpg',
   'images/13.jpg',
   'images/14.jpg',
@@ -59,24 +59,45 @@ const images = [
   'images/20.jpg'  // задняя обложка
 ];
 
-const flipbook = $('#flipbook');
-
-// создаём страницы
-images.forEach((img, idx) => {
-  const page = $('<div>').addClass('page').css('background-image', `url('${img}')`);
-  flipbook.append(page);
-});
-
 $(document).ready(function(){
+  const flipbook = $('#flipbook');
+
+  // создаём страницы
+  images.forEach((img, idx) => {
+    const page = $('<div>')
+      .addClass('page')
+      .css('background-image', `url('${img}')`);
+    
+    // первая и последняя страницы отдельно (обложки)
+    if(idx === 0 || idx === images.length - 1) {
+      page.addClass('single');
+    } else {
+      page.addClass('double');
+    }
+
+    flipbook.append(page);
+  });
+
+  // инициализация flipbook
   flipbook.turn({
     width: 872,
     height: 1220,
     autoCenter: true,
     pages: images.length,
-    display: 'double',  // открываем по две страницы
+    display: 'double',  // двойные страницы
     acceleration: true,
     gradients: true,
-    elevation: 50
+    elevation: 50,
+    when: {
+      turning: function(e, page, view) {
+        // показываем обложки отдельно
+        if(page === 1 || page === images.length) {
+          flipbook.turn('display', 'single');
+        } else {
+          flipbook.turn('display', 'double');
+        }
+      }
+    }
   });
 });
 </script>
