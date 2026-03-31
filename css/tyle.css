@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+#flipbook {
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  border-radius: 10px;
+}
+.page {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
