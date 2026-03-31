@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Flipbook PDF</title>
+<title>Flipbook PDF - single page</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="js/turn.min.js"></script>
 <style>
@@ -11,13 +11,15 @@ body {
   padding: 0;
   background: #f0f0f0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 100vh;
 }
 #flipbook {
   width: 872px;
   height: 1220px;
+  margin-bottom: 10px;
 }
 .page {
   width: 100%;
@@ -27,18 +29,24 @@ body {
   background-repeat: no-repeat;
   box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
-.page.empty {
-  background: #f0f0f0;
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  margin: 5px;
 }
 </style>
 </head>
 <body>
 
 <div id="flipbook"></div>
+<div>
+  <button id="prev">← Назад</button>
+  <button id="next">Вперёд →</button>
+</div>
 
 <script>
 const images = [
-  'images/1.jpg', // первая обложка
+  'images/1.jpg',
   'images/2.jpg',
   'images/3.jpg',
   'images/4.jpg',
@@ -47,43 +55,41 @@ const images = [
   'images/7.jpg',
   'images/8.jpg',
   'images/9.jpg',
-  'images/10.jpg' // последняя обложка
+  'images/10.jpg',
+  'images/11.jpg',
+  'images/12.jpg',
+  'images/13.jpg',
+  'images/14.jpg',
+  'images/15.jpg',
+  'images/16.jpg',
+  'images/17.jpg',
+  'images/18.jpg',
+  'images/19.jpg',
+  'images/20.jpg'
 ];
 
 $(document).ready(function(){
   const flipbook = $('#flipbook');
 
-  // добавляем первую обложку как одиночную страницу
-  flipbook.append($('<div>').addClass('page').css('background-image', `url('${images[0]}')`));
+  // добавляем страницы
+  images.forEach(img => {
+    flipbook.append($('<div>').addClass('page').css('background-image', `url('${img}')`));
+  });
 
-  // внутренние страницы
-  for(let i = 1; i < images.length - 1; i++){
-    flipbook.append($('<div>').addClass('page').css('background-image', `url('${images[i]}')`));
-  }
-
-  // последняя обложка
-  flipbook.append($('<div>').addClass('page').css('background-image', `url('${images[images.length-1]}')`));
-
-  // инициализация flipbook
+  // инициализация turn.js
   flipbook.turn({
     width: 872,
     height: 1220,
     autoCenter: true,
-    display: 'double', 
+    display: 'single', // листание по одной странице
     acceleration: true,
     gradients: true,
-    elevation: 50,
-    when: {
-      turning: function(e, page, view) {
-        // если первая или последняя — одиночная
-        if(page === 1 || page === images.length) {
-          flipbook.turn('display', 'single');
-        } else {
-          flipbook.turn('display', 'double');
-        }
-      }
-    }
+    elevation: 50
   });
+
+  // кнопки навигации
+  $('#next').click(() => flipbook.turn('next'));
+  $('#prev').click(() => flipbook.turn('previous'));
 });
 </script>
 
