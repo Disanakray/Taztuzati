@@ -17,27 +17,32 @@ body {
   background: #f0f0f0;
 }
 #flipbook {
-  width: 872px;    /* ширина одной страницы */
-  height: 1220px;  /* высота страницы */
+  width: 872px;
+  height: 1220px;
 }
 .page {
   width: 100%;
   height: 100%;
-  background-size: cover;  /* изображение растягивается */
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
+/* пустая страница для выравнивания обложки */
+.page.empty {
+  background: #f0f0f0;
+}
 </style>
 </head>
 <body>
+
 <div id="flipbook"></div>
 
 <script>
-// Массив изображений
+// массив изображений
 const images = [
-  'images/1.jpg',   // обложка
+  'images/1.jpg',  // первая обложка
   'images/2.jpg',
   'images/3.jpg',
   'images/4.jpg',
@@ -46,60 +51,41 @@ const images = [
   'images/7.jpg',
   'images/8.jpg',
   'images/9.jpg',
-  'images/10.jpg',
-  'images/11.jpg',
-  'images/12.jpg',
-  'images/13.jpg',
-  'images/14.jpg',
-  'images/15.jpg',
-  'images/16.jpg',
-  'images/17.jpg',
-  'images/18.jpg',
-  'images/19.jpg',
-  'images/20.jpg'  // задняя обложка
+  'images/10.jpg', // последняя обложка
 ];
 
 $(document).ready(function(){
   const flipbook = $('#flipbook');
 
-  // создаём страницы
-  images.forEach((img, idx) => {
-    const page = $('<div>')
-      .addClass('page')
-      .css('background-image', `url('${img}')`);
-    
-    // первая и последняя страницы отдельно (обложки)
-    if(idx === 0 || idx === images.length - 1) {
-      page.addClass('single');
-    } else {
-      page.addClass('double');
-    }
+  // добавляем пустую страницу перед первой обложкой
+  flipbook.append($('<div>').addClass('page empty'));
 
-    flipbook.append(page);
-  });
+  // первая обложка
+  flipbook.append($('<div>').addClass('page').css('background-image', `url('${images[0]}')`));
 
-  // инициализация flipbook
+  // все внутренние страницы
+  for(let i = 1; i < images.length - 1; i++){
+    flipbook.append($('<div>').addClass('page').css('background-image', `url('${images[i]}')`));
+  }
+
+  // последняя обложка
+  flipbook.append($('<div>').addClass('page').css('background-image', `url('${images[images.length-1]}')`));
+
+  // добавляем пустую страницу после последней обложки
+  flipbook.append($('<div>').addClass('page empty'));
+
+  // инициализация turn.js
   flipbook.turn({
     width: 872,
     height: 1220,
     autoCenter: true,
-    pages: images.length,
-    display: 'double',  // двойные страницы
+    display: 'double', // развороты по две страницы
     acceleration: true,
     gradients: true,
-    elevation: 50,
-    when: {
-      turning: function(e, page, view) {
-        // показываем обложки отдельно
-        if(page === 1 || page === images.length) {
-          flipbook.turn('display', 'single');
-        } else {
-          flipbook.turn('display', 'double');
-        }
-      }
-    }
+    elevation: 50
   });
 });
 </script>
+
 </body>
 </html>
