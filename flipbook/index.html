@@ -3,18 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Flipbook PDF</title>
-<link rel="stylesheet" href="css/style.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="js/turn.min.js"></script>
 <style>
 body {
   margin: 0;
   padding: 0;
+  background: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #f0f0f0;
 }
 #flipbook {
   width: 872px;
@@ -26,10 +25,8 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 5px;
   box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
-/* пустая страница для выравнивания обложки */
 .page.empty {
   background: #f0f0f0;
 }
@@ -40,9 +37,8 @@ body {
 <div id="flipbook"></div>
 
 <script>
-// массив изображений
 const images = [
-  'images/1.jpg',  // первая обложка
+  'images/1.jpg', // первая обложка
   'images/2.jpg',
   'images/3.jpg',
   'images/4.jpg',
@@ -51,19 +47,16 @@ const images = [
   'images/7.jpg',
   'images/8.jpg',
   'images/9.jpg',
-  'images/10.jpg', // последняя обложка
+  'images/10.jpg' // последняя обложка
 ];
 
 $(document).ready(function(){
   const flipbook = $('#flipbook');
 
-  // добавляем пустую страницу перед первой обложкой
-  flipbook.append($('<div>').addClass('page empty'));
-
-  // первая обложка
+  // добавляем первую обложку как одиночную страницу
   flipbook.append($('<div>').addClass('page').css('background-image', `url('${images[0]}')`));
 
-  // все внутренние страницы
+  // внутренние страницы
   for(let i = 1; i < images.length - 1; i++){
     flipbook.append($('<div>').addClass('page').css('background-image', `url('${images[i]}')`));
   }
@@ -71,18 +64,25 @@ $(document).ready(function(){
   // последняя обложка
   flipbook.append($('<div>').addClass('page').css('background-image', `url('${images[images.length-1]}')`));
 
-  // добавляем пустую страницу после последней обложки
-  flipbook.append($('<div>').addClass('page empty'));
-
-  // инициализация turn.js
+  // инициализация flipbook
   flipbook.turn({
     width: 872,
     height: 1220,
     autoCenter: true,
-    display: 'double', // развороты по две страницы
+    display: 'double', 
     acceleration: true,
     gradients: true,
-    elevation: 50
+    elevation: 50,
+    when: {
+      turning: function(e, page, view) {
+        // если первая или последняя — одиночная
+        if(page === 1 || page === images.length) {
+          flipbook.turn('display', 'single');
+        } else {
+          flipbook.turn('display', 'double');
+        }
+      }
+    }
   });
 });
 </script>
