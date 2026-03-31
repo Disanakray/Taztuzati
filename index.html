@@ -35,17 +35,16 @@ body {
 </head>
 <body>
 <div id="flipbook">
-  <!-- Страницы будут подгружаться автоматически через JS -->
+  <!-- Страницы подгрузятся автоматически через JS -->
 </div>
 
 <script>
-// Автоматически подгружаем все страницы из папки images
-const totalPages = 20; // <-- поставь количество страниц в твоем PDF
+// Укажи количество страниц в твоем PDF
+const totalPages = 20; // <- замени на своё количество страниц
 const flipbook = $('#flipbook');
 
 for (let i = 1; i <= totalPages; i++) {
-    const num = i.toString().padStart(2, '0'); // формируем 01, 02...
-    const pageDiv = $('<div>').addClass('page').css('background-image', `url('images/page${num}.jpg')`);
+    const pageDiv = $('<div>').addClass('page').css('background-image', `url('images/${i}.jpg')`);
     flipbook.append(pageDiv);
 }
 
