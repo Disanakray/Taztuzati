@@ -8,6 +8,10 @@ body {
   border-radius: 10px;
 }
 .page {
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  background-size: cover;       /* изображение заполняет страницу */
+  background-position: center;  /* центрирование */
+  background-repeat: no-repeat;
+
 }
