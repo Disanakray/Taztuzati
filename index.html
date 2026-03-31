@@ -18,7 +18,7 @@ body {
 }
 #flipbook {
   width: 90%;
-  max-width: 600px;
+  max-width: 872px; /* ширина под твои изображения */
   height: 80vh;
   box-shadow: 0 0 20px rgba(0,0,0,0.3);
   border-radius: 10px;
@@ -26,7 +26,8 @@ body {
 .page {
   width: 100%;
   height: 100%;
-  background-size: cover;
+  background-size: contain; /* полностью помещаем картинку */
+  background-repeat: no-repeat;
   background-position: center;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -34,13 +35,11 @@ body {
 </style>
 </head>
 <body>
-<div id="flipbook">
-  <!-- Страницы подгрузятся автоматически через JS -->
-</div>
+<div id="flipbook"></div>
 
 <script>
-// Укажи количество страниц в твоем PDF
-const totalPages = 20; // <- замени на своё количество страниц
+// Здесь JS автоматически подгружает все изображения из images/
+const totalPages = 10; // <- замените на количество страниц в вашем PDF
 const flipbook = $('#flipbook');
 
 for (let i = 1; i <= totalPages; i++) {
@@ -50,8 +49,8 @@ for (let i = 1; i <= totalPages; i++) {
 
 $(document).ready(function(){
   flipbook.turn({
-    width: 600,
-    height: 800,
+    width: 872,
+    height: 1220,
     autoCenter: true
   });
 });
